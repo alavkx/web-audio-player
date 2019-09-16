@@ -12,24 +12,24 @@ type state = {
   activeTrackIndex: option(int),
 };
 type event =
-  | PlayTrack(option(int))
+  | PlayTrack(int)
   | PlayPause
   | Stop
   | FastForward
   | Rewind
   | DoNothing;
 [@react.component]
-let make = (~tracks: option(array(App.track))) => {
+let make = (~tracks: array(Track.t)) => {
   let (state, send) =
     React.useReducer(
       (state, event) =>
         switch (state.status, event) {
-        | (_, PlayTrack(None)) => {
+        | (_, PlayTrack(i)) => {activeTrackIndex: Some(i), status: Playing}
+        | (Stopped, PlayPause) => {
             activeTrackIndex: Some(0),
             status: Playing,
           }
-        | (_, PlayTrack(i)) => {activeTrackIndex: i, status: Playing}
-        | (Stopped | Paused | Rewinding | FastForwarding, PlayPause) => {
+        | (Paused | Rewinding | FastForwarding, PlayPause) => {
             ...state,
             status: Playing,
           }
@@ -49,6 +49,7 @@ let make = (~tracks: option(array(App.track))) => {
       {activeTrackIndex: None, status: Stopped},
     );
   <>
+    <Library tracks playTrack={i => send(PlayTrack(i))} />
     <nav>
       <main>
         {str(

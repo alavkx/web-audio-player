@@ -19,15 +19,17 @@ type event =
   | FocusRow(int)
   | Next
   | Previous
+  | TriggerEffect
   | DoNothing;
-let keyboardEvent = (e: ReactEvent.Keyboard.t) =>
+let handleKeyboardEvent = (e: ReactEvent.Keyboard.t) =>
   switch (ReactEvent.Keyboard.key(e)) {
   | "ArrowDown" => Next
   | "ArrowUp" => Previous
+  | "Enter" => TriggerEffect
   | _ => DoNothing
   };
 [@react.component]
-let make = (~tracks: option(array(App.track)), ~playTrack: int => unit) => {
+let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
   let (state, send) =
     React.useReducer(
       (state, event) =>
@@ -44,15 +46,23 @@ let make = (~tracks: option(array(App.track)), ~playTrack: int => unit) => {
           {focusedTrackIndex: nextId, status: getPosition(nextId, tracks)};
         | (First, Previous)
         | (Last, Next)
-        | (_, DoNothing) => state
+        | (_, DoNothing)
+        | (_, TriggerEffect) => state
         },
       {focusedTrackIndex: 0, status: First},
     );
   <table
-    className="library" tabIndex=0 onKeyDown={e => send(keyboardEvent(e))}>
+    className="library"
+    tabIndex=0
+    onKeyDown={e =>
+      switch (handleKeyboardEvent(e)) {
+      | TriggerEffect => playTrack(state.focusedTrackIndex)
+      | x => send(x)
+      }
+    }>
     {React.array(
        Array.mapi(
-         (i, {artist, name}: App.track) =>
+         (i, {artist, name}: Track.t) =>
            <tr
              style={ReactDOMRe.Style.make(
                ~backgroundColor=
