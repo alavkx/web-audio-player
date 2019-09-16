@@ -8,7 +8,7 @@ var Util$ReactHooksTemplate = require("../Util.bs.js");
 
 require("./Library.css");
 
-function getPosition(index, xs) {
+function posOfArray(index, xs) {
   if (index !== 0) {
     if (index >= (xs.length - 1 | 0)) {
       return /* Last */2;
@@ -38,7 +38,7 @@ function Library(Props) {
   var tracks = Props.tracks;
   var playTrack = Props.playTrack;
   var match = React.useReducer((function (state, $$event) {
-          var match = state[/* status */1];
+          var match = state[/* status */0];
           var exit = 0;
           var exit$1 = 0;
           if (typeof $$event === "number") {
@@ -69,32 +69,32 @@ function Library(Props) {
           } else {
             var i = $$event[0];
             return /* record */[
-                    /* focusedTrackIndex */i,
-                    /* status */getPosition(i, tracks)
+                    /* status */posOfArray(i, tracks),
+                    /* focusedTrackIndex */i
                   ];
           }
           if (exit$1 === 2) {
             if ($$event !== 0) {
-              var nextId = state[/* focusedTrackIndex */0] - 1 | 0;
+              var nextId = state[/* focusedTrackIndex */1] - 1 | 0;
               return /* record */[
-                      /* focusedTrackIndex */nextId,
-                      /* status */getPosition(nextId, tracks)
+                      /* status */posOfArray(nextId, tracks),
+                      /* focusedTrackIndex */nextId
                     ];
             } else {
               exit = 1;
             }
           }
           if (exit === 1) {
-            var nextId$1 = state[/* focusedTrackIndex */0] + 1 | 0;
+            var nextId$1 = state[/* focusedTrackIndex */1] + 1 | 0;
             return /* record */[
-                    /* focusedTrackIndex */nextId$1,
-                    /* status */getPosition(nextId$1, tracks)
+                    /* status */posOfArray(nextId$1, tracks),
+                    /* focusedTrackIndex */nextId$1
                   ];
           }
           
         }), /* record */[
-        /* focusedTrackIndex */0,
-        /* status : First */0
+        /* status : First */0,
+        /* focusedTrackIndex */0
       ]);
   var send = match[1];
   var state = match[0];
@@ -104,13 +104,13 @@ function Library(Props) {
               onKeyDown: (function (e) {
                   var x = handleKeyboardEvent(e);
                   if (typeof x === "number" && x === 2) {
-                    return Curry._1(playTrack, state[/* focusedTrackIndex */0]);
+                    return Curry._1(playTrack, state[/* focusedTrackIndex */1]);
                   } else {
                     return Curry._1(send, x);
                   }
                 })
             }, $$Array.mapi((function (i, param) {
-                    var match = state[/* focusedTrackIndex */0] === i;
+                    var match = state[/* focusedTrackIndex */1] === i;
                     return React.createElement("tr", {
                                 key: String(i),
                                 style: {
@@ -128,7 +128,7 @@ function Library(Props) {
 
 var make = Library;
 
-exports.getPosition = getPosition;
+exports.posOfArray = posOfArray;
 exports.handleKeyboardEvent = handleKeyboardEvent;
 exports.make = make;
 /*  Not a pure module */

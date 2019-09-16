@@ -1,17 +1,17 @@
 open Util;
 requireCSS("./Player.css");
 
-type progress =
+type status =
   | Stopped
   | Playing
   | Rewinding
   | FastForwarding
   | Paused;
 type state = {
-  status: progress,
+  status,
   activeTrackIndex: option(int),
 };
-type event =
+type transition =
   | PlayTrack(int)
   | PlayPause
   | Stop

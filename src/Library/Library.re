@@ -1,21 +1,21 @@
 open Util;
 requireCSS("./Library.css");
 
-type position =
+type status =
   | First
   | Middle
   | Last;
-let getPosition = (index: int, xs: array('a)) =>
+let posOfArray = (index: int, xs: array('a)) =>
   switch (index) {
   | 0 => First
   | x when x >= Array.length(xs) - 1 => Last
   | _ => Middle
   };
 type state = {
+  status,
   focusedTrackIndex: int,
-  status: position,
 };
-type event =
+type transition =
   | FocusRow(int)
   | Next
   | Previous
@@ -36,14 +36,14 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
         switch (state.status, event) {
         | (_, FocusRow(i)) => {
             focusedTrackIndex: i,
-            status: getPosition(i, tracks),
+            status: posOfArray(i, tracks),
           }
         | (Last | Middle, Previous) =>
           let nextId = state.focusedTrackIndex - 1;
-          {focusedTrackIndex: nextId, status: getPosition(nextId, tracks)};
+          {focusedTrackIndex: nextId, status: posOfArray(nextId, tracks)};
         | (First | Middle, Next) =>
           let nextId = state.focusedTrackIndex + 1;
-          {focusedTrackIndex: nextId, status: getPosition(nextId, tracks)};
+          {focusedTrackIndex: nextId, status: posOfArray(nextId, tracks)};
         | (First, Previous)
         | (Last, Next)
         | (_, DoNothing)
