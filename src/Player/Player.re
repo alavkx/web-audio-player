@@ -1,97 +1,50 @@
 open Util;
 requireCSS("./Player.css");
-
 type status =
-  | Stopped
-  | Playing
-  | Rewinding
-  | FastForwarding
-  | Paused;
+  | Stopped;
+type event =
+  | PlayTrack(int);
 type state = {
   status,
   activeTrackIndex: option(int),
 };
-type transition =
-  | PlayTrack(int)
-  | PlayPause
-  | Stop
-  | FastForward
-  | Rewind
-  | DoNothing;
 [@react.component]
 let make = (~tracks: array(Track.t)) => {
-  let (state, send) =
+  let (_state, send) =
     React.useReducer(
       (state, event) =>
         switch (state.status, event) {
-        | (_, PlayTrack(i)) => {activeTrackIndex: Some(i), status: Playing}
-        | (Stopped, PlayPause) => {
-            activeTrackIndex: Some(0),
-            status: Playing,
-          }
-        | (Paused | Rewinding | FastForwarding, PlayPause) => {
-            ...state,
-            status: Playing,
-          }
-        | (Playing, PlayPause) => {...state, status: Paused}
-        | (Paused | Playing | Rewinding | FastForwarding, Rewind) => {
-            ...state,
-            status: Rewinding,
-          }
-        | (Paused | Playing | Rewinding | FastForwarding, FastForward) => {
-            ...state,
-            status: FastForwarding,
-          }
-        | (_, Stop) => {activeTrackIndex: None, status: Stopped}
-        | (Stopped, FastForward | Rewind)
-        | (_, DoNothing) => state
+        | (Stopped, PlayTrack(i)) => {...state, activeTrackIndex: Some(i)}
         },
-      {activeTrackIndex: None, status: Stopped},
+      {status: Stopped, activeTrackIndex: None},
+    );
+  let (audio, playerState, controls) =
+    ReactUse.useAudio(
+      ReactUse.config(
+        ~src=
+          "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+        ~autoPlay=false,
+      ),
     );
   <>
     <Library tracks playTrack={i => send(PlayTrack(i))} />
-    <nav>
-      <main>
-        {str(
-           switch (state.activeTrackIndex) {
-           | None => "Play a song, stupid"
-           | Some(i) => "Now playing: " ++ tracks[i].name
-           },
-         )}
-      </main>
-      <section ariaLabel="player">
-        <audio controls=true>
-          <source src="viper.mp3" type_="audio/mp3" />
-          <p>
-            {str("Your browser doesn't support HTML5 video. Here is a ")}
-            <a href="rabbit320.mp4"> {str("link to the video ")} </a>
-            {str("instead.")}
-          </p>
-        </audio>
-        <div className="controls">
-          <button onClick={_ => send(PlayPause)} className="playpause">
-            {str(
-               switch (state.status) {
-               | Rewinding
-               | FastForwarding
-               | Paused
-               | Stopped => "Play"
-               | Playing => "Pause"
-               },
-             )}
-          </button>
-          <button onClick={_ => send(Stop)} className="stop">
-            {str("Stop")}
-          </button>
-          <button onClick={_ => send(Rewind)} className="rwd">
-            {str("Rwd")}
-          </button>
-          <button onClick={_ => send(FastForward)} className="fwd">
-            {str("Fwd")}
-          </button>
-          <div className="time"> {str("00:00")} </div>
-        </div>
-      </section>
-    </nav>
+    <section ariaLabel="player">
+      audio
+      <div className="controls">
+        <button onClick={controls.pause}> {str("Pause")} </button>
+        <button onClick={controls.play}> {str("Play")} </button>
+        <button onClick={controls.mute}> {str("Mute")} </button>
+        <button onClick={controls.unmute}> {str("Un-mute")} </button>
+        <input type_="range" onChange={() => controls.volume(0.5)}>
+          {str("Volume: 50%")}
+        </input>
+        <button onClick={() => controls.seek(state.time - 5)}>
+          {str("-5 sec")}
+        </button>
+        <button onClick={() => controls.seek(state.time + 5)}>
+          {str("+5 sec")}
+        </button>
+      </div>
+    </section>
   </>;
 };

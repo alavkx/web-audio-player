@@ -30,7 +30,7 @@ function handleKeyboardEvent(e) {
     case "Enter" : 
         return /* TriggerEffect */2;
     default:
-      return /* DoNothing */3;
+      return /* NoOp */3;
   }
 }
 
@@ -109,21 +109,21 @@ function Library(Props) {
                     return Curry._1(send, x);
                   }
                 })
-            }, $$Array.mapi((function (i, param) {
-                    var match = state[/* focusedTrackIndex */1] === i;
-                    return React.createElement("tr", {
-                                key: String(i),
-                                style: {
-                                  backgroundColor: match ? "blue" : "white"
-                                },
-                                onClick: (function (param) {
-                                    return Curry._1(send, /* FocusRow */[i]);
-                                  }),
-                                onDoubleClick: (function (param) {
-                                    return Curry._1(playTrack, i);
-                                  })
-                              }, React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* artist */1])), React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* name */0])));
-                  }), tracks));
+            }, React.createElement("tbody", undefined, $$Array.mapi((function (i, param) {
+                        var match = state[/* focusedTrackIndex */1] === i;
+                        return React.createElement("tr", {
+                                    key: String(i),
+                                    style: {
+                                      backgroundColor: match ? "blue" : "white"
+                                    },
+                                    onClick: (function (param) {
+                                        return Curry._1(send, /* FocusRow */[i]);
+                                      }),
+                                    onDoubleClick: (function (param) {
+                                        return Curry._1(playTrack, i);
+                                      })
+                                  }, React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* artist */1])), React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* name */0])));
+                      }), tracks)));
 }
 
 var make = Library;
