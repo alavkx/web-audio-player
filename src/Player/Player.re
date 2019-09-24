@@ -31,17 +31,24 @@ let make = (~tracks: array(Track.t)) => {
     <section ariaLabel="player">
       audio
       <div className="controls">
-        <button onClick={controls.pause}> {str("Pause")} </button>
-        <button onClick={controls.play}> {str("Play")} </button>
-        <button onClick={controls.mute}> {str("Mute")} </button>
-        <button onClick={controls.unmute}> {str("Un-mute")} </button>
-        <input type_="range" onChange={() => controls.volume(0.5)}>
-          {str("Volume: 50%")}
+        <button onClick={controls##pause}> {str("Pause")} </button>
+        // <button onClick={controls##play}> {str("Play")} </button>
+        <button onClick={controls##mute}> {str("Mute")} </button>
+        <button onClick={controls##unmute}> {str("Un-mute")} </button>
+        <input
+          type_="range"
+          onChange={(e: ReactEvent.Form.t) =>
+            controls##volume(ReactEvent.Form.target(e)##value)
+          }
+          min=0
+          max=1
+          step={0.01}
+          {str("Volume:")}
         </input>
-        <button onClick={() => controls.seek(state.time - 5)}>
+        <button onClick={() => controls##seek(state.time - 5)}>
           {str("-5 sec")}
         </button>
-        <button onClick={() => controls.seek(state.time + 5)}>
+        <button onClick={() => controls##seek(state.time + 5)}>
           {str("+5 sec")}
         </button>
       </div>
