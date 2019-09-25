@@ -6,22 +6,22 @@ module App = {
     {
       artist: "Kromestar",
       name: "007",
-      src: "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+      src: "/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
     },
     {
       artist: "Kromestar",
       name: "008",
-      src: "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+      src: "/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
     },
     {
       artist: "Kromestar",
       name: "009",
-      src: "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+      src: "/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
     },
     {
       artist: "Kromestar",
       name: "0010",
-      src: "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+      src: "/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
     },
   |];
   [@react.component]
