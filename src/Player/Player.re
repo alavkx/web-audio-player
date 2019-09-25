@@ -28,29 +28,37 @@ let make = (~tracks: array(Track.t)) => {
     );
   <>
     <Library tracks playTrack={i => send(PlayTrack(i))} />
-    <section ariaLabel="player">
-      audio
+    <section
+      ariaLabel="player"
+      onKeyDown={(e: ReactEvent.Keyboard.t) =>
+        switch (ReactEvent.Keyboard.key(e)) {
+        | "ArrowLeft" => controls.seek(playerState.time -. 5.0)
+        | "ArrowRight" => controls.seek(playerState.time +. 5.0)
+        | _ => ()
+        }
+      }>
       <div className="controls">
-        <button onClick={controls##pause}> {str("Pause")} </button>
-        // <button onClick={controls##play}> {str("Play")} </button>
-        <button onClick={controls##mute}> {str("Mute")} </button>
-        <button onClick={controls##unmute}> {str("Un-mute")} </button>
+        audio
+        <button onClick={_e => controls.pause()}> {str("Pause")} </button>
+        <button
+          onClick={_e =>
+            switch (controls.play()) {
+            | _ => ()
+            }
+          }>
+          {str("Play")}
+        </button>
+        <button onClick={_e => controls.mute()}> {str("Mute")} </button>
+        <button onClick={_e => controls.unmute()}> {str("Un-mute")} </button>
         <input
           type_="range"
           onChange={(e: ReactEvent.Form.t) =>
-            controls##volume(ReactEvent.Form.target(e)##value)
+            controls.volume(ReactEvent.Form.target(e)##value)
           }
           min=0
-          max=1
-          step={0.01}
-          {str("Volume:")}
-        </input>
-        <button onClick={() => controls##seek(state.time - 5)}>
-          {str("-5 sec")}
-        </button>
-        <button onClick={() => controls##seek(state.time + 5)}>
-          {str("+5 sec")}
-        </button>
+          max="1"
+          step=0.01
+        />
       </div>
     </section>
   </>;
