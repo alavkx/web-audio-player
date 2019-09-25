@@ -3,6 +3,7 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
+var ReactUse = require("react-use");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Util$ReactHooksTemplate = require("../Util.bs.js");
 var Library$ReactHooksTemplate = require("../Library/Library.bs.js");
@@ -12,111 +13,79 @@ require("./Player.css");
 function Player(Props) {
   var tracks = Props.tracks;
   var match = React.useReducer((function (state, $$event) {
-          var match = state[/* status */0];
-          var exit = 0;
-          if (typeof $$event === "number") {
-            if ($$event !== 1) {
-              if ($$event >= 4) {
-                return state;
-              } else if (match !== 1) {
-                if (match !== 0) {
-                  if ($$event >= 2) {
-                    exit = 1;
-                  } else {
-                    return /* record */[
-                            /* status : Playing */1,
-                            /* activeTrackIndex */state[/* activeTrackIndex */1]
-                          ];
-                  }
-                } else if ($$event >= 2) {
-                  return state;
-                } else {
-                  return /* record */[
-                          /* status : Playing */1,
-                          /* activeTrackIndex */0
-                        ];
-                }
-              } else if ($$event >= 2) {
-                exit = 1;
-              } else {
-                return /* record */[
-                        /* status : Paused */4,
-                        /* activeTrackIndex */state[/* activeTrackIndex */1]
-                      ];
-              }
-            } else {
-              return /* record */[
-                      /* status : Stopped */0,
-                      /* activeTrackIndex */undefined
-                    ];
-            }
-          } else {
-            return /* record */[
-                    /* status : Playing */1,
-                    /* activeTrackIndex */$$event[0]
-                  ];
-          }
-          if (exit === 1) {
-            if ($$event >= 3) {
-              return /* record */[
-                      /* status : Rewinding */2,
-                      /* activeTrackIndex */state[/* activeTrackIndex */1]
-                    ];
-            } else {
-              return /* record */[
-                      /* status : FastForwarding */3,
-                      /* activeTrackIndex */state[/* activeTrackIndex */1]
-                    ];
-            }
-          }
-          
+          return /* record */[
+                  /* status */state[/* status */0],
+                  /* activeTrackIndex */$$event[0]
+                ];
         }), /* record */[
         /* status : Stopped */0,
         /* activeTrackIndex */undefined
       ]);
   var send = match[1];
-  var state = match[0];
-  var match$1 = state[/* activeTrackIndex */1];
-  var match$2 = state[/* status */0];
+  var match$1 = match[0][/* activeTrackIndex */1];
+  var match$2 = ReactUse.useAudio({
+        src: match$1 !== undefined ? Caml_array.caml_array_get(tracks, match$1)[/* src */2] : "",
+        autoPlay: false
+      });
+  var controls = match$2[2];
+  var playerState = match$2[1];
+  var match$3 = playerState.pause;
   return React.createElement(React.Fragment, undefined, React.createElement(Library$ReactHooksTemplate.make, {
                   tracks: tracks,
                   playTrack: (function (i) {
                       return Curry._1(send, /* PlayTrack */[i]);
                     })
-                }), React.createElement("nav", undefined, React.createElement("main", undefined, Util$ReactHooksTemplate.str(match$1 !== undefined ? "Now playing: " + Caml_array.caml_array_get(tracks, match$1)[/* name */0] : "Play a song, stupid")), React.createElement("section", {
-                      "aria-label": "player"
-                    }, React.createElement("audio", {
-                          controls: true
-                        }, React.createElement("source", {
-                              src: "viper.mp3",
-                              type: "audio/mp3"
-                            }), React.createElement("p", undefined, Util$ReactHooksTemplate.str("Your browser doesn't support HTML5 video. Here is a "), React.createElement("a", {
-                                  href: "rabbit320.mp4"
-                                }, Util$ReactHooksTemplate.str("link to the video ")), Util$ReactHooksTemplate.str("instead."))), React.createElement("div", {
-                          className: "controls"
-                        }, React.createElement("button", {
-                              className: "playpause",
-                              onClick: (function (param) {
-                                  return Curry._1(send, /* PlayPause */0);
-                                })
-                            }, Util$ReactHooksTemplate.str(match$2 !== 1 ? "Play" : "Pause")), React.createElement("button", {
-                              className: "stop",
-                              onClick: (function (param) {
-                                  return Curry._1(send, /* Stop */1);
-                                })
-                            }, Util$ReactHooksTemplate.str("Stop")), React.createElement("button", {
-                              className: "rwd",
-                              onClick: (function (param) {
-                                  return Curry._1(send, /* Rewind */3);
-                                })
-                            }, Util$ReactHooksTemplate.str("Rwd")), React.createElement("button", {
-                              className: "fwd",
-                              onClick: (function (param) {
-                                  return Curry._1(send, /* FastForward */2);
-                                })
-                            }, Util$ReactHooksTemplate.str("Fwd")), React.createElement("div", {
-                              className: "time"
-                            }, Util$ReactHooksTemplate.str("00:00"))))));
+                }), React.createElement("section", {
+                  "aria-label": "player",
+                  onKeyDown: (function (e) {
+                      var match = e.key;
+                      switch (match) {
+                        case "ArrowLeft" : 
+                            return controls.seek(playerState.time - 5.0);
+                        case "ArrowRight" : 
+                            return controls.seek(playerState.time + 5.0);
+                        default:
+                          return /* () */0;
+                      }
+                    })
+                }, React.createElement("div", {
+                      className: "controls"
+                    }, match$2[0], React.createElement("input", {
+                          defaultValue: "0",
+                          max: playerState.duration.toString(),
+                          min: 0,
+                          step: 1.0,
+                          type: "range",
+                          onChange: (function (e) {
+                              return controls.seek(e.target.value);
+                            })
+                        }), match$3 ? React.createElement("button", {
+                            onClick: (function (_e) {
+                                return controls.pause();
+                              })
+                          }, Util$ReactHooksTemplate.str("Pause")) : React.createElement("button", {
+                            onClick: (function (_e) {
+                                controls.play();
+                                return /* () */0;
+                              })
+                          }, Util$ReactHooksTemplate.str("Play")), React.createElement("button", {
+                          onClick: (function (_e) {
+                              return controls.mute();
+                            })
+                        }, Util$ReactHooksTemplate.str("Mute")), React.createElement("button", {
+                          onClick: (function (_e) {
+                              return controls.unmute();
+                            })
+                        }, Util$ReactHooksTemplate.str("Un-mute")), Util$ReactHooksTemplate.str("Volume" + ((playerState.volume * 100.0).toFixed() + "%")), React.createElement("input", {
+                          defaultValue: "1",
+                          max: "1",
+                          min: 0,
+                          step: 0.01,
+                          type: "range",
+                          onChange: (function (e) {
+                              return controls.volume(e.target.value);
+                            })
+                        }))));
 }
 
 var make = Player;

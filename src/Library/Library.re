@@ -1,6 +1,12 @@
 open Util;
 requireCSS("./Library.css");
 
+type event =
+  | FocusRow(int)
+  | Next
+  | Previous
+  | TriggerEffect
+  | NoOp;
 type status =
   | First
   | Middle
@@ -15,18 +21,12 @@ type state = {
   status,
   focusedTrackIndex: int,
 };
-type transition =
-  | FocusRow(int)
-  | Next
-  | Previous
-  | TriggerEffect
-  | DoNothing;
 let handleKeyboardEvent = (e: ReactEvent.Keyboard.t) =>
   switch (ReactEvent.Keyboard.key(e)) {
   | "ArrowDown" => Next
   | "ArrowUp" => Previous
   | "Enter" => TriggerEffect
-  | _ => DoNothing
+  | _ => NoOp
   };
 [@react.component]
 let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
@@ -46,7 +46,7 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
           {focusedTrackIndex: nextId, status: posOfArray(nextId, tracks)};
         | (First, Previous)
         | (Last, Next)
-        | (_, DoNothing)
+        | (_, NoOp)
         | (_, TriggerEffect) => state
         },
       {focusedTrackIndex: 0, status: First},
@@ -57,26 +57,28 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
     onKeyDown={e =>
       switch (handleKeyboardEvent(e)) {
       | TriggerEffect => playTrack(state.focusedTrackIndex)
-      | x => send(x)
+      | (Next | Previous | NoOp | FocusRow(_)) as x => send(x)
       }
     }>
-    {React.array(
-       Array.mapi(
-         (i, {artist, name}: Track.t) =>
-           <tr
-             style={ReactDOMRe.Style.make(
-               ~backgroundColor=
-                 state.focusedTrackIndex == i ? "blue" : "white",
-               (),
-             )}
-             key={string_of_int(i)}
-             onClick={_ => send(FocusRow(i))}
-             onDoubleClick={_ => playTrack(i)}>
-             <td> {str(artist)} </td>
-             <td> {str(name)} </td>
-           </tr>,
-         tracks,
-       ),
-     )}
+    <tbody>
+      {React.array(
+         Array.mapi(
+           (i, {artist, name}: Track.t) =>
+             <tr
+               style={ReactDOMRe.Style.make(
+                 ~backgroundColor=
+                   state.focusedTrackIndex == i ? "blue" : "white",
+                 (),
+               )}
+               key={string_of_int(i)}
+               onClick={_ => send(FocusRow(i))}
+               onDoubleClick={_ => playTrack(i)}>
+               <td> {str(artist)} </td>
+               <td> {str(name)} </td>
+             </tr>,
+           tracks,
+         ),
+       )}
+    </tbody>
   </table>;
 };
