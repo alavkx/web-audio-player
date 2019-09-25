@@ -43,12 +43,28 @@ let make = (~tracks: array(Track.t)) => {
       }>
       <div className="controls">
         audio
-        <button onClick={_e => controls##pause()}> {str("Pause")} </button>
-        <button onClick={_e => controls##play() |> ignore}>
-          {str("Play")}
-        </button>
+        <input
+          type_="range"
+          onChange={(e: ReactEvent.Form.t) =>
+            controls##seek(ReactEvent.Form.target(e)##value)
+          }
+          min=0
+          max={Js.Float.toString(playerState##duration)}
+          step=1.0
+          defaultValue="0"
+        />
+        {playerState##pause
+           ? <button onClick={_e => controls##pause()}>
+               {str("Pause")}
+             </button>
+           : <button onClick={_e => controls##play() |> ignore}>
+               {str("Play")}
+             </button>}
         <button onClick={_e => controls##mute()}> {str("Mute")} </button>
         <button onClick={_e => controls##unmute()}> {str("Un-mute")} </button>
+        {str(
+           "Volume" ++ Js.Float.toFixed(playerState##volume *. 100.0) ++ "%",
+         )}
         <input
           type_="range"
           onChange={(e: ReactEvent.Form.t) =>
@@ -57,6 +73,7 @@ let make = (~tracks: array(Track.t)) => {
           min=0
           max="1"
           step=0.01
+          defaultValue="1"
         />
       </div>
     </section>

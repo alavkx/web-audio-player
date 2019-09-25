@@ -29,6 +29,7 @@ function Player(Props) {
       });
   var controls = match$2[2];
   var playerState = match$2[1];
+  var match$3 = playerState.pause;
   return React.createElement(React.Fragment, undefined, React.createElement(Library$ReactHooksTemplate.make, {
                   tracks: tracks,
                   playTrack: (function (i) {
@@ -49,16 +50,25 @@ function Player(Props) {
                     })
                 }, React.createElement("div", {
                       className: "controls"
-                    }, match$2[0], React.createElement("button", {
-                          onClick: (function (_e) {
-                              return controls.pause();
+                    }, match$2[0], React.createElement("input", {
+                          defaultValue: "0",
+                          max: playerState.duration.toString(),
+                          min: 0,
+                          step: 1.0,
+                          type: "range",
+                          onChange: (function (e) {
+                              return controls.seek(e.target.value);
                             })
-                        }, Util$ReactHooksTemplate.str("Pause")), React.createElement("button", {
-                          onClick: (function (_e) {
-                              controls.play();
-                              return /* () */0;
-                            })
-                        }, Util$ReactHooksTemplate.str("Play")), React.createElement("button", {
+                        }), match$3 ? React.createElement("button", {
+                            onClick: (function (_e) {
+                                return controls.pause();
+                              })
+                          }, Util$ReactHooksTemplate.str("Pause")) : React.createElement("button", {
+                            onClick: (function (_e) {
+                                controls.play();
+                                return /* () */0;
+                              })
+                          }, Util$ReactHooksTemplate.str("Play")), React.createElement("button", {
                           onClick: (function (_e) {
                               return controls.mute();
                             })
@@ -66,7 +76,8 @@ function Player(Props) {
                           onClick: (function (_e) {
                               return controls.unmute();
                             })
-                        }, Util$ReactHooksTemplate.str("Un-mute")), React.createElement("input", {
+                        }, Util$ReactHooksTemplate.str("Un-mute")), Util$ReactHooksTemplate.str("Volume" + ((playerState.volume * 100.0).toFixed() + "%")), React.createElement("input", {
+                          defaultValue: "1",
                           max: "1",
                           min: 0,
                           step: 0.01,
