@@ -1,14 +1,16 @@
 type buffer = {
-  start: float,
-  _end: float,
+  .
+  "start": float,
+  "end": float,
 };
 type state = {
-  buffered: array(buffer),
-  time: float,
-  duration: float,
-  pause: bool,
-  muted: bool,
-  volume: float,
+  .
+  "buffered": array(buffer),
+  "time": float,
+  "duration": float,
+  "pause": bool,
+  "muted": bool,
+  "volume": float,
 };
 [@bs.deriving abstract]
 type config = {
@@ -16,12 +18,13 @@ type config = {
   autoPlay: bool,
 };
 type controls = {
-  play: unit => Js.Nullable.t(Js.Promise.t(unit)),
-  pause: unit => unit,
-  mute: unit => unit,
-  unmute: unit => unit,
-  volume: float => unit,
-  seek: float => unit,
+  .
+  [@bs.meth] "play": unit => Js.Nullable.t(Js.Promise.t(unit)),
+  [@bs.meth] "pause": unit => unit,
+  [@bs.meth] "mute": unit => unit,
+  [@bs.meth] "unmute": unit => unit,
+  [@bs.meth] "volume": float => unit,
+  [@bs.meth] "seek": float => unit,
 };
 
 [@bs.module "react-use"]

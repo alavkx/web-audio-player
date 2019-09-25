@@ -4,6 +4,7 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReactUse = require("react-use");
+var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Util$ReactHooksTemplate = require("../Util.bs.js");
 var Library$ReactHooksTemplate = require("../Library/Library.bs.js");
 
@@ -21,12 +22,13 @@ function Player(Props) {
         /* activeTrackIndex */undefined
       ]);
   var send = match[1];
-  var match$1 = ReactUse.useAudio({
-        src: "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+  var match$1 = match[0][/* activeTrackIndex */1];
+  var match$2 = ReactUse.useAudio({
+        src: match$1 !== undefined ? Caml_array.caml_array_get(tracks, match$1)[/* src */2] : "",
         autoPlay: false
       });
-  var controls = match$1[2];
-  var playerState = match$1[1];
+  var controls = match$2[2];
+  var playerState = match$2[1];
   return React.createElement(React.Fragment, undefined, React.createElement(Library$ReactHooksTemplate.make, {
                   tracks: tracks,
                   playTrack: (function (i) {
@@ -38,31 +40,31 @@ function Player(Props) {
                       var match = e.key;
                       switch (match) {
                         case "ArrowLeft" : 
-                            return Curry._1(controls[/* seek */5], playerState[/* time */1] - 5.0);
+                            return controls.seek(playerState.time - 5.0);
                         case "ArrowRight" : 
-                            return Curry._1(controls[/* seek */5], playerState[/* time */1] + 5.0);
+                            return controls.seek(playerState.time + 5.0);
                         default:
                           return /* () */0;
                       }
                     })
                 }, React.createElement("div", {
                       className: "controls"
-                    }, match$1[0], React.createElement("button", {
+                    }, match$2[0], React.createElement("button", {
                           onClick: (function (_e) {
-                              return Curry._1(controls[/* pause */1], /* () */0);
+                              return controls.pause();
                             })
                         }, Util$ReactHooksTemplate.str("Pause")), React.createElement("button", {
                           onClick: (function (_e) {
-                              Curry._1(controls[/* play */0], /* () */0);
+                              controls.play();
                               return /* () */0;
                             })
                         }, Util$ReactHooksTemplate.str("Play")), React.createElement("button", {
                           onClick: (function (_e) {
-                              return Curry._1(controls[/* mute */2], /* () */0);
+                              return controls.mute();
                             })
                         }, Util$ReactHooksTemplate.str("Mute")), React.createElement("button", {
                           onClick: (function (_e) {
-                              return Curry._1(controls[/* unmute */3], /* () */0);
+                              return controls.unmute();
                             })
                         }, Util$ReactHooksTemplate.str("Un-mute")), React.createElement("input", {
                           max: "1",
@@ -70,7 +72,7 @@ function Player(Props) {
                           step: 0.01,
                           type: "range",
                           onChange: (function (e) {
-                              return Curry._1(controls[/* volume */4], e.target.value);
+                              return controls.volume(e.target.value);
                             })
                         }))));
 }

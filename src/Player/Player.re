@@ -10,7 +10,7 @@ type state = {
 };
 [@react.component]
 let make = (~tracks: array(Track.t)) => {
-  let (_state, send) =
+  let (state, send) =
     React.useReducer(
       (state, event) =>
         switch (state.status, event) {
@@ -21,8 +21,12 @@ let make = (~tracks: array(Track.t)) => {
   let (audio, playerState, controls) =
     ReactUse.useAudio(
       ReactUse.config(
-        ~src=
-          "/Users/alavkx/Projects/reasonml-test/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav",
+        ~src={
+          switch (state.activeTrackIndex) {
+          | Some(i) => tracks[i].src
+          | None => ""
+          };
+        },
         ~autoPlay=false,
       ),
     );
@@ -32,28 +36,23 @@ let make = (~tracks: array(Track.t)) => {
       ariaLabel="player"
       onKeyDown={(e: ReactEvent.Keyboard.t) =>
         switch (ReactEvent.Keyboard.key(e)) {
-        | "ArrowLeft" => controls.seek(playerState.time -. 5.0)
-        | "ArrowRight" => controls.seek(playerState.time +. 5.0)
+        | "ArrowLeft" => controls##seek(playerState##time -. 5.0)
+        | "ArrowRight" => controls##seek(playerState##time +. 5.0)
         | _ => ()
         }
       }>
       <div className="controls">
         audio
-        <button onClick={_e => controls.pause()}> {str("Pause")} </button>
-        <button
-          onClick={_e =>
-            switch (controls.play()) {
-            | _ => ()
-            }
-          }>
+        <button onClick={_e => controls##pause()}> {str("Pause")} </button>
+        <button onClick={_e => controls##play() |> ignore}>
           {str("Play")}
         </button>
-        <button onClick={_e => controls.mute()}> {str("Mute")} </button>
-        <button onClick={_e => controls.unmute()}> {str("Un-mute")} </button>
+        <button onClick={_e => controls##mute()}> {str("Mute")} </button>
+        <button onClick={_e => controls##unmute()}> {str("Un-mute")} </button>
         <input
           type_="range"
           onChange={(e: ReactEvent.Form.t) =>
-            controls.volume(ReactEvent.Form.target(e)##value)
+            controls##volume(ReactEvent.Form.target(e)##value)
           }
           min=0
           max="1"
