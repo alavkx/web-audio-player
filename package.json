@@ -17,10 +17,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bs-abstract": "^0.17.0",
+    "bs-react-icons": "github:alavkx/bs-react-icons",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-use": "^12.2.0",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.7.0",
+    "relude": "^0.28.1"
   },
   "devDependencies": {
     "bs-platform": "^5.0.6",

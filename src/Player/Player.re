@@ -30,28 +30,27 @@ let make = (~tracks: array(Track.t)) => {
         ~autoPlay=false,
       ),
     );
-  <>
+  <div
+    onKeyDown={(e: ReactEvent.Keyboard.t) =>
+      switch (ReactEvent.Keyboard.key(e)) {
+      | "ArrowLeft" => controls##seek(playerState##time -. 5.0)
+      | "ArrowRight" => controls##seek(playerState##time +. 5.0)
+      | _ => ()
+      }
+    }>
     <Library tracks playTrack={i => send(PlayTrack(i))} />
-    <section
-      ariaLabel="player"
-      onKeyDown={(e: ReactEvent.Keyboard.t) =>
-        switch (ReactEvent.Keyboard.key(e)) {
-        | "ArrowLeft" => controls##seek(playerState##time -. 5.0)
-        | "ArrowRight" => controls##seek(playerState##time +. 5.0)
-        | _ => ()
-        }
-      }>
+    <section ariaLabel="player">
       <div className="controls">
         audio
         <input
           type_="range"
+          value={Js.Float.toString(playerState##time)}
           onChange={(e: ReactEvent.Form.t) =>
             controls##seek(ReactEvent.Form.target(e)##value)
           }
           min=0
           max={Js.Float.toString(playerState##duration)}
           step=1.0
-          defaultValue="0"
         />
         {playerState##pause
            ? <button onClick={_e => controls##pause()}>
@@ -67,15 +66,15 @@ let make = (~tracks: array(Track.t)) => {
          )}
         <input
           type_="range"
+          value={Js.Float.toString(playerState##volume)}
           onChange={(e: ReactEvent.Form.t) =>
             controls##volume(ReactEvent.Form.target(e)##value)
           }
           min=0
           max="1"
           step=0.01
-          defaultValue="1"
         />
       </div>
     </section>
-  </>;
+  </div>;
 };
