@@ -12,22 +12,22 @@ var persistedTracks = /* array */[
   /* record */[
     /* name */"007",
     /* artist */"Kromestar",
-    /* src */"/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav"
+    /* src */"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
   ],
   /* record */[
     /* name */"008",
     /* artist */"Kromestar",
-    /* src */"/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav"
+    /* src */"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
   ],
   /* record */[
     /* name */"009",
     /* artist */"Kromestar",
-    /* src */"/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav"
+    /* src */"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
   ],
   /* record */[
     /* name */"0010",
     /* artist */"Kromestar",
-    /* src */"/Users/alavkx/Projects/web-audio-player/static/Skepta - Nasty (Kelly Dean Bootleg Remix).wav"
+    /* src */"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
   ]
 ];
 
