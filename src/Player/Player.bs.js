@@ -29,6 +29,7 @@ function Player(Props) {
   var controls = match$2[2];
   var playerState = match$2[1];
   var match$3 = playerState.pause;
+  var match$4 = playerState.muted;
   return React.createElement("div", {
               onKeyDown: (function (e) {
                   var match = e.key;
@@ -48,18 +49,9 @@ function Player(Props) {
                     })
                 }), React.createElement("section", {
                   "aria-label": "player"
-                }, React.createElement("div", {
+                }, match$2[0], React.createElement("div", {
                       className: "controls"
-                    }, match$2[0], React.createElement("input", {
-                          max: playerState.duration.toString(),
-                          min: 0,
-                          step: 1.0,
-                          type: "range",
-                          value: playerState.time.toString(),
-                          onChange: (function (e) {
-                              return controls.seek(e.target.value);
-                            })
-                        }), match$3 ? React.createElement("button", {
+                    }, match$3 ? React.createElement("button", {
                             onClick: (function (_e) {
                                 return controls.pause();
                               })
@@ -68,15 +60,24 @@ function Player(Props) {
                                 controls.play();
                                 return /* () */0;
                               })
-                          }, Util$ReactHooksTemplate.str("Play")), React.createElement("button", {
-                          onClick: (function (_e) {
-                              return controls.mute();
+                          }, Util$ReactHooksTemplate.str("Play")), React.createElement("input", {
+                          max: playerState.duration.toString(),
+                          min: 0,
+                          step: 1.0,
+                          type: "range",
+                          value: playerState.time.toString(),
+                          onChange: (function (e) {
+                              return controls.seek(e.target.value);
                             })
-                        }, Util$ReactHooksTemplate.str("Mute")), React.createElement("button", {
-                          onClick: (function (_e) {
-                              return controls.unmute();
-                            })
-                        }, Util$ReactHooksTemplate.str("Un-mute")), Util$ReactHooksTemplate.str("Volume" + ((playerState.volume * 100.0).toFixed() + "%")), React.createElement("input", {
+                        }), match$4 ? React.createElement("button", {
+                            onClick: (function (_e) {
+                                return controls.unmute();
+                              })
+                          }, Util$ReactHooksTemplate.str("Un-mute")) : React.createElement("button", {
+                            onClick: (function (_e) {
+                                return controls.mute();
+                              })
+                          }, Util$ReactHooksTemplate.str("Mute")), Util$ReactHooksTemplate.str("Volume" + ((playerState.volume * 100.0).toFixed() + "%")), React.createElement("input", {
                           max: "1",
                           min: 0,
                           step: 0.01,

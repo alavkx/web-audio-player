@@ -78,7 +78,7 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
            (i, {artist, name}: Track.t) =>
              <tr
                style={ReactDOMRe.Style.make(
-                 ~backgroundColor=eqPos(i, state.status) ? "blue" : "white",
+                 ~borderColor=eqPos(i, state.status) ? "blue" : "grey",
                  (),
                )}
                key={string_of_int(i)}

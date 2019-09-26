@@ -40,8 +40,15 @@ let make = (~tracks: array(Track.t)) => {
     }>
     <Library tracks playTrack={i => send(PlayTrack(i))} />
     <section ariaLabel="player">
+      audio
       <div className="controls">
-        audio
+        {playerState##pause
+           ? <button onClick={_e => controls##pause()}>
+               {str("Pause")}
+             </button>
+           : <button onClick={_e => controls##play() |> ignore}>
+               {str("Play")}
+             </button>}
         <input
           type_="range"
           value={Js.Float.toString(playerState##time)}
@@ -52,15 +59,11 @@ let make = (~tracks: array(Track.t)) => {
           max={Js.Float.toString(playerState##duration)}
           step=1.0
         />
-        {playerState##pause
-           ? <button onClick={_e => controls##pause()}>
-               {str("Pause")}
+        {playerState##muted
+           ? <button onClick={_e => controls##unmute()}>
+               {str("Un-mute")}
              </button>
-           : <button onClick={_e => controls##play() |> ignore}>
-               {str("Play")}
-             </button>}
-        <button onClick={_e => controls##mute()}> {str("Mute")} </button>
-        <button onClick={_e => controls##unmute()}> {str("Un-mute")} </button>
+           : <button onClick={_e => controls##mute()}> {str("Mute")} </button>}
         {str(
            "Volume" ++ Js.Float.toFixed(playerState##volume *. 100.0) ++ "%",
          )}

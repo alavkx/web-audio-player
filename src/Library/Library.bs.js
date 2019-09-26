@@ -112,7 +112,7 @@ function Library(Props) {
                         return React.createElement("tr", {
                                     key: String(i),
                                     style: {
-                                      backgroundColor: match ? "blue" : "white"
+                                      borderColor: match ? "blue" : "grey"
                                     },
                                     onClick: (function (param) {
                                         return Curry._1(send, /* FocusRow */[i]);
