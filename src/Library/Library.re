@@ -71,7 +71,9 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
       | TriggerEffect => state.status->valOfPos->playTrack
       | (Next | Previous | NoOp | FocusRow(_) | Blur) as x => send(x)
       }
-    }>
+    }
+    onFocus={_e => send(FocusRow(0))}
+    onBlur={_e => send(Blur)}>
     <tbody>
       {React.array(
          Array.mapi(

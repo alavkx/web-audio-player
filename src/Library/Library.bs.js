@@ -106,6 +106,12 @@ function Library(Props) {
                   } else {
                     return Curry._1(send, x);
                   }
+                }),
+              onFocus: (function (_e) {
+                  return Curry._1(send, /* FocusRow */[0]);
+                }),
+              onBlur: (function (_e) {
+                  return Curry._1(send, /* Blur */2);
                 })
             }, React.createElement("tbody", undefined, $$Array.mapi((function (i, param) {
                         var match = eqPos(i, state[/* status */0]);
