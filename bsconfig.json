@@ -9,13 +9,18 @@
   },
   "package-specs": [
     {
-      "module": "commonjs",
+      "module": "es6",
       "in-source": true
     }
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": ["reason-react"],
+  "bs-dependencies": [
+    "reason-react",
+    "bs-react-icons",
+    "bs-abstract",
+    "relude"
+  ],
   "refmt": 3,
   "warnings": {
     "number": "+A-9-40-42-48",

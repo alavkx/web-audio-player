@@ -1,5 +1,17 @@
-table.library {
+.library {
   display: flex;
   width: 100%;
   flex-flow: column nowrap;
+  background-color: white;
+}
+.library:focus {
+  outline: none;
+}
+.library tr {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  width: 100%;
+  border: 2px solid whitesmoke;
+  border-bottom-color: transparent;
 }

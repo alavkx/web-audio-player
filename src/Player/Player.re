@@ -1,9 +1,16 @@
 open Util;
 requireCSS("./Player.css");
 type status =
-  | Stopped;
+  | Paused
+  | Playing;
 type event =
-  | PlayTrack(int);
+  | PlayTrack(int)
+  | TogglePlayPause;
+let nextStrOfStatus = s =>
+  switch (s) {
+  | Paused => "Play"
+  | Playing => "Pause"
+  };
 type state = {
   status,
   activeTrackIndex: option(int),
@@ -14,9 +21,18 @@ let make = (~tracks: array(Track.t)) => {
     React.useReducer(
       (state, event) =>
         switch (state.status, event) {
-        | (Stopped, PlayTrack(i)) => {...state, activeTrackIndex: Some(i)}
+        | (_, PlayTrack(i)) => {activeTrackIndex: Some(i), status: Playing}
+        | (Paused, TogglePlayPause) => {
+            activeTrackIndex:
+              switch (state.activeTrackIndex) {
+              | None => Some(0)
+              | Some(i) => Some(i)
+              },
+            status: Playing,
+          }
+        | (Playing, TogglePlayPause) => {...state, status: Paused}
         },
-      {status: Stopped, activeTrackIndex: None},
+      {status: Paused, activeTrackIndex: None},
     );
   let (audio, playerState, controls) =
     ReactUse.useAudio(
@@ -30,50 +46,53 @@ let make = (~tracks: array(Track.t)) => {
         ~autoPlay=false,
       ),
     );
+  React.useEffect2(
+    () => {
+      switch (state.status) {
+      | Playing => controls##play()->ignore
+      | Paused => controls##pause()
+      };
+      None;
+    },
+    (state.status, controls),
+  );
   <>
     <Library tracks playTrack={i => send(PlayTrack(i))} />
-    <section
-      ariaLabel="player"
-      onKeyDown={(e: ReactEvent.Keyboard.t) =>
-        switch (ReactEvent.Keyboard.key(e)) {
-        | "ArrowLeft" => controls##seek(playerState##time -. 5.0)
-        | "ArrowRight" => controls##seek(playerState##time +. 5.0)
-        | _ => ()
-        }
-      }>
+    <section ariaLabel="player">
+      audio
       <div className="controls">
-        audio
+        <button onClick={_e => send(TogglePlayPause)}>
+          {nextStrOfStatus(state.status)->str}
+        </button>
         <input
           type_="range"
+          value={Js.Float.toString(playerState##time)}
           onChange={(e: ReactEvent.Form.t) =>
             controls##seek(ReactEvent.Form.target(e)##value)
           }
           min=0
           max={Js.Float.toString(playerState##duration)}
           step=1.0
-          defaultValue="0"
         />
-        {playerState##pause
-           ? <button onClick={_e => controls##pause()}>
-               {str("Pause")}
+        {playerState##muted
+           ? <button onClick={_e => controls##unmute()}>
+               {str("Un-mute")}
              </button>
-           : <button onClick={_e => controls##play() |> ignore}>
-               {str("Play")}
-             </button>}
-        <button onClick={_e => controls##mute()}> {str("Mute")} </button>
-        <button onClick={_e => controls##unmute()}> {str("Un-mute")} </button>
-        {str(
-           "Volume" ++ Js.Float.toFixed(playerState##volume *. 100.0) ++ "%",
-         )}
+           : <button onClick={_e => controls##mute()}> {str("Mute")} </button>}
+        {playerState##volume
+         *. 100.0
+         |> Js.Float.toFixed
+         |> Js.String.concat("%")
+         |> str}
         <input
           type_="range"
+          value={Js.Float.toString(playerState##volume)}
           onChange={(e: ReactEvent.Form.t) =>
             controls##volume(ReactEvent.Form.target(e)##value)
           }
           min=0
           max="1"
           step=0.01
-          defaultValue="1"
         />
       </div>
     </section>
