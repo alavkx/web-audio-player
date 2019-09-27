@@ -8,7 +8,7 @@ type state = {
   "buffered": array(buffer),
   "time": float,
   "duration": float,
-  "pause": bool,
+  "paused": bool,
   "muted": bool,
   "volume": float,
 };
