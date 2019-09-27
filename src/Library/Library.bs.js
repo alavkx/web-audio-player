@@ -114,12 +114,12 @@ function Library(Props) {
                   return Curry._1(send, /* Blur */2);
                 })
             }, React.createElement("tbody", undefined, $$Array.mapi((function (i, param) {
-                        var match = eqPos(i, state[/* status */0]);
+                        var isFocusedRow = eqPos(i, state[/* status */0]);
                         return React.createElement("tr", {
                                     key: String(i),
-                                    style: {
-                                      borderColor: match ? "blue" : "grey"
-                                    },
+                                    style: isFocusedRow ? ({
+                                          borderColor: "blue"
+                                        }) : { },
                                     onClick: (function (param) {
                                         return Curry._1(send, /* FocusRow */[i]);
                                       }),

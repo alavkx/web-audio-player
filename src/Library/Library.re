@@ -75,23 +75,23 @@ let make = (~tracks: array(Track.t), ~playTrack: int => unit) => {
     onFocus={_e => send(FocusRow(0))}
     onBlur={_e => send(Blur)}>
     <tbody>
-      {React.array(
-         Array.mapi(
-           (i, {artist, name}: Track.t) =>
-             <tr
-               style={ReactDOMRe.Style.make(
-                 ~borderColor=eqPos(i, state.status) ? "blue" : "grey",
-                 (),
-               )}
-               key={string_of_int(i)}
-               onClick={_ => send(FocusRow(i))}
-               onDoubleClick={_ => playTrack(i)}>
-               <td> {str(artist)} </td>
-               <td> {str(name)} </td>
-             </tr>,
-           tracks,
-         ),
-       )}
+      {tracks
+       |> Array.mapi((i, {artist, name}: Track.t) => {
+            let isFocusedRow = eqPos(i, state.status);
+            <tr
+              style={
+                isFocusedRow
+                  ? ReactDOMRe.Style.make(~borderColor="blue", ())
+                  : ReactDOMRe.Style.make()
+              }
+              key={string_of_int(i)}
+              onClick={_ => send(FocusRow(i))}
+              onDoubleClick={_ => playTrack(i)}>
+              <td> {str(artist)} </td>
+              <td> {str(name)} </td>
+            </tr>;
+          })
+       |> React.array}
     </tbody>
   </table>;
 };

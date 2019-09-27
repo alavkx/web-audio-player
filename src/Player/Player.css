@@ -3,6 +3,9 @@
   width: 100%;
   flex-flow: row wrap;
   justify-content: space-between;
+  padding: 16px;
+  background-color: ghostwhite;
+  border: 1px solid whitesmoke;
 }
 
 button:hover,
