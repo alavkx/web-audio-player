@@ -15,6 +15,17 @@ type state = {
   status,
   activeTrackIndex: option(int),
 };
+let timeOfFloat = (secondsTotal: float) => {
+  let minutes = secondsTotal /. 60. |> int_of_float;
+  let hours = minutes / 60;
+  let seconds = mod_float(secondsTotal, 60.)->int_of_float;
+  let strOfTime = x =>
+    switch (x) {
+    | 0 => ""
+    | x => string_of_int(x) ++ ":"
+    };
+  strOfTime(hours) ++ strOfTime(minutes) ++ string_of_int(seconds);
+};
 [@react.component]
 let make = (~tracks: array(Track.t)) => {
   let (state, send) =
@@ -74,6 +85,7 @@ let make = (~tracks: array(Track.t)) => {
           max={Js.Float.toString(playerState##duration)}
           step=1.0
         />
+        {playerState##time->timeOfFloat->str}
         {playerState##muted
            ? <button onClick={_e => controls##unmute()}>
                {str("Un-mute")}

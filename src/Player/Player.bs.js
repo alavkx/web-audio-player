@@ -17,6 +17,20 @@ function nextStrOfStatus(s) {
   }
 }
 
+function timeOfFloat(secondsTotal) {
+  var minutes = secondsTotal / 60 | 0;
+  var hours = minutes / 60 | 0;
+  var seconds = secondsTotal % 60 | 0;
+  var strOfTime = function (x) {
+    if (x !== 0) {
+      return String(x) + ":";
+    } else {
+      return "";
+    }
+  };
+  return strOfTime(hours) + (strOfTime(minutes) + String(seconds));
+}
+
 function Player(Props) {
   var tracks = Props.tracks;
   var match = React.useReducer((function (state, $$event) {
@@ -86,7 +100,7 @@ function Player(Props) {
                           onChange: (function (e) {
                               return controls.seek(e.target.value);
                             })
-                        }), match$3 ? React.createElement("button", {
+                        }), Util$ReactHooksTemplate.str(timeOfFloat(playerState.time)), match$3 ? React.createElement("button", {
                             onClick: (function (_e) {
                                 return controls.unmute();
                               })
@@ -110,6 +124,7 @@ var make = Player;
 
 export {
   nextStrOfStatus ,
+  timeOfFloat ,
   make ,
   
 }
