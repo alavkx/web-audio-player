@@ -4,7 +4,7 @@ import * as $$Array from "bs-platform/lib/es6/array.js";
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
-import * as Util$ReactHooksTemplate from "../Util.bs.js";
+import * as Util$WebAudioPlayer from "../Util.bs.js";
 
 require("./Library.css");
 
@@ -126,7 +126,7 @@ function Library(Props) {
                                     onDoubleClick: (function (param) {
                                         return Curry._1(playTrack, i);
                                       })
-                                  }, React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* artist */1])), React.createElement("td", undefined, Util$ReactHooksTemplate.str(param[/* name */0])));
+                                  }, React.createElement("td", undefined, Util$WebAudioPlayer.str(param[/* artist */1])), React.createElement("td", undefined, Util$WebAudioPlayer.str(param[/* name */0])));
                       }), tracks)));
 }
 

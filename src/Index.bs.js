@@ -3,8 +3,8 @@
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as ReactDOMRe from "reason-react/src/ReactDOMRe.js";
-import * as Util$ReactHooksTemplate from "./Util.bs.js";
-import * as Player$ReactHooksTemplate from "./Player/Player.bs.js";
+import * as Util$WebAudioPlayer from "./Util.bs.js";
+import * as Player$WebAudioPlayer from "./Player/Player.bs.js";
 
 require("./App.css");
 
@@ -49,11 +49,11 @@ function Index$App(Props) {
                   });
         }), /* array */[setTracks]);
   if (tracks !== undefined) {
-    return React.createElement(Player$ReactHooksTemplate.make, {
+    return React.createElement(Player$WebAudioPlayer.make, {
                 tracks: tracks
               });
   } else {
-    return Util$ReactHooksTemplate.str("Booting up the most incredible experience of your life...");
+    return Util$WebAudioPlayer.str("Booting up the most incredible experience of your life...");
   }
 }
 

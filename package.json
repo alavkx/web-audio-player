@@ -11,6 +11,10 @@
     "deploy": "npm run clean && npm run build && npm run webpack:production",
     "server": "webpack-dev-server"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alavkx/web-audio-player.git"
+  },
   "keywords": [
     "BuckleScript"
   ],

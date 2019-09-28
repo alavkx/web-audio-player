@@ -4,8 +4,8 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as ReactUse from "react-use";
 import * as Caml_array from "bs-platform/lib/es6/caml_array.js";
-import * as Util$ReactHooksTemplate from "../Util.bs.js";
-import * as Library$ReactHooksTemplate from "../Library/Library.bs.js";
+import * as Util$WebAudioPlayer from "../Util.bs.js";
+import * as Library$WebAudioPlayer from "../Library/Library.bs.js";
 
 require("./Player.css");
 
@@ -78,7 +78,7 @@ function Player(Props) {
         controls
       ]);
   var match$3 = playerState.muted;
-  return React.createElement(React.Fragment, undefined, React.createElement(Library$ReactHooksTemplate.make, {
+  return React.createElement(React.Fragment, undefined, React.createElement(Library$WebAudioPlayer.make, {
                   tracks: tracks,
                   playTrack: (function (i) {
                       return Curry._1(send, /* PlayTrack */[i]);
@@ -91,7 +91,7 @@ function Player(Props) {
                           onClick: (function (_e) {
                               return Curry._1(send, /* TogglePlayPause */0);
                             })
-                        }, Util$ReactHooksTemplate.str(state[/* status */0] ? "Pause" : "Play")), React.createElement("input", {
+                        }, Util$WebAudioPlayer.str(state[/* status */0] ? "Pause" : "Play")), React.createElement("input", {
                           max: playerState.duration.toString(),
                           min: 0,
                           step: 1.0,
@@ -100,15 +100,15 @@ function Player(Props) {
                           onChange: (function (e) {
                               return controls.seek(e.target.value);
                             })
-                        }), Util$ReactHooksTemplate.str(timeOfFloat(playerState.time)), match$3 ? React.createElement("button", {
+                        }), Util$WebAudioPlayer.str(timeOfFloat(playerState.time)), match$3 ? React.createElement("button", {
                             onClick: (function (_e) {
                                 return controls.unmute();
                               })
-                          }, Util$ReactHooksTemplate.str("Un-mute")) : React.createElement("button", {
+                          }, Util$WebAudioPlayer.str("Un-mute")) : React.createElement("button", {
                             onClick: (function (_e) {
                                 return controls.mute();
                               })
-                          }, Util$ReactHooksTemplate.str("Mute")), Util$ReactHooksTemplate.str((playerState.volume * 100.0).toFixed().concat("%")), React.createElement("input", {
+                          }, Util$WebAudioPlayer.str("Mute")), Util$WebAudioPlayer.str((playerState.volume * 100.0).toFixed().concat("%")), React.createElement("input", {
                           max: "1",
                           min: 0,
                           step: 0.01,
